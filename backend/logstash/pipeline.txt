@@ -1,0 +1,79 @@
+input {
+  http {
+    port => "5044"
+    user => "<random-user>"
+    password => "<changeme>"
+  }
+}
+
+filter{
+ grok {
+    #patterns_dir => "{{ .Env.HOME }}/grok-patterns"
+    match => { "message" => "%{SYSLOG5424PRI}%{NONNEGINT:syslog5424_ver} +(?:%{TIMESTAMP_ISO8601:syslog5424_ts}|-) +(?:%{HOSTNAME:syslog5424_host}|-) +(?:%{NOTSPACE:syslog5424_app}|-) +(?:%{NOTSPACE:syslog5424_proc}|-) +(?:%{WORD:syslog5424_msgid}|-) +(?:%{SYSLOG5424SD:syslog5424_sd}|-|)%{SPACE}%{GREEDYDATA:message}" }
+    add_tag => [ "CF", "CF-%{syslog5424_proc}", "parsed"]
+    add_field => { "format" => "cf" }
+    tag_on_failure => [ ]
+    overwrite => [ "message" ]
+  }
+  mutate {
+        split => ["syslog5424_host", "."]
+        add_field => { "cf-org" => "%{[syslog5424_host][0]}" }
+        add_field => { "cf-space" => "%{[syslog5424_host][1]}" }
+        add_field => { "cf-app" => "%{[syslog5424_host][2]}" }
+    }
+  if [syslog5424_proc] =~ /\[(A[pP]{2}.+)/ {
+    mutate { add_tag => ["CF-APP"] }
+    mutate { remove_tag => ["parsed"] }
+  }
+  if  ("CF-APP" in [tags]) or !("CF" in [tags])  {
+    if [message] =~ /^{.*}/ {
+      json {
+        source => "message"
+        add_tag => [ "json", "parsed"]
+      }
+    }
+  }
+  if !("CF-APP" in [tags]) {
+   mutate {
+        add_field => { "msg" => "%{[message]}" }
+        add_tag => [ "CF-PAAS"]
+    }
+  }
+  if !("parsed" in [tags]) {
+    mutate{
+      add_tag => [ "unparsed" ]
+    }
+  }
+}
+
+output {
+    if ("parsed" in [tags]) {
+      elasticsearch {
+        hosts => ["https://<elasticsearch-instance>.elasticsearch.lyra-836.appcloud.swisscom.com"]
+        user => "logstash-system-<id>"
+        password => "<logstash-system-password>"
+        ssl => true
+        ssl_certificate_verification => true
+        codec => "plain"
+        workers => 1
+        index => "parsed-%{+YYYY.MM.dd}"
+        manage_template => true
+        template_name => "logstash"
+        template_overwrite => true
+      }
+    } else {
+      elasticsearch {
+        hosts => ["https://<elasticsearch-instance>.elasticsearch.lyra-836.appcloud.swisscom.com"]
+        user => "logstash-system-<id>"
+        password => "<logstash-system-password>"
+        ssl => true
+        ssl_certificate_verification => true
+        codec => "plain"
+        workers => 1
+        index => "unparsed-%{+YYYY.MM.dd}"
+        manage_template => true
+        template_name => "logstash"
+        template_overwrite => true
+      }
+    }
+}

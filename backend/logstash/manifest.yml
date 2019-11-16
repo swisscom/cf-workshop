@@ -1,0 +1,26 @@
+applications:
+  - name: logstash
+    memory: 1G
+    disk_quota: 2G
+    instances: 1
+    routes:
+      - route: cf-workshop-logstash.scapp.io
+    services:
+      - elasticsearch
+    docker:
+      image: docker.elastic.co/logstash/logstash:7.3.1
+    command: |
+      curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output /tmp/jq &&
+      chmod +x /tmp/jq &&
+      export XPACK_MANAGEMENT_ELASTICSEARCH_HOSTS=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.host') &&
+      export XPACK_MANAGEMENT_ELASTICSEARCH_USERNAME=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.full_access_username') &&
+      export XPACK_MANAGEMENT_ELASTICSEARCH_PASSWORD=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.full_access_password') &&
+      export XPACK_MONITORING_ELASTICSEARCH_HOSTS=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.host') &&
+      export XPACK_MONITORING_ELASTICSEARCH_USERNAME=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.full_access_username') &&
+      export XPACK_MONITORING_ELASTICSEARCH_PASSWORD=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.full_access_password') &&
+      /usr/local/bin/docker-entrypoint
+    env:
+      XPACK_MANAGEMENT_ENABLED: true
+      XPACK_MANAGEMENT_PIPELINE_ID: '["logstash_pipeline"]'
+      XPACK_MONITORING_ENABLED: true
+      PATH_CONFIG: ""

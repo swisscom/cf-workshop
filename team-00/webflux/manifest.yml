@@ -1,0 +1,19 @@
+---
+applications:
+  - name: webflux
+    instances: 1
+    disk_quota: 256M
+    memory: 768M
+    path: build/libs/webflux-1.0.0.jar
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health
+    buildpacks:
+      - java_buildpack
+    random-route: true
+    services:
+      - openweathermap
+      - rabbitmq
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+      TZ: Europe/Zurich
+      LOCATION: Baar,ch

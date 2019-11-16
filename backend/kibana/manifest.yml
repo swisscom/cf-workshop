@@ -1,0 +1,18 @@
+applications:
+  - name: kibana
+    memory: 1G
+    disk_quota: 2G
+    instances: 1
+    routes:
+      - route: cf-workshop-kibana.scapp.io
+    services:
+      - elasticsearch
+    docker:
+      image: docker.elastic.co/kibana/kibana:7.3.1
+    command: |
+      curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 --output /tmp/jq &&
+      chmod +x /tmp/jq &&
+      export ELASTICSEARCH_HOSTS=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.host') &&
+      export ELASTICSEARCH_USERNAME=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.full_access_username') &&
+      export ELASTICSEARCH_PASSWORD=$(echo $VCAP_SERVICES | /tmp/jq -r '.elasticsearch[0].credentials.full_access_password') &&
+      /usr/local/bin/dumb-init -- /usr/local/bin/kibana-docker
