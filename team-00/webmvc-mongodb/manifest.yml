@@ -1,0 +1,19 @@
+---
+applications:
+  - name: webmvc-mongodb
+    instances: 1
+    disk_quota: 256M
+    memory: 768M
+    path: build/libs/webmvc-mongodb-1.0.0.jar
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health
+    buildpacks:
+      - java_buildpack
+    random-route: true
+    services:
+      - openweathermap
+      - rabbitmq
+      - mongodb
+    env:
+      TZ: Europe/Zurich
+      LOCATION: Basel,ch
