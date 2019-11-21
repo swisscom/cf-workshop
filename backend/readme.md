@@ -36,6 +36,23 @@ Push the Kibana docker image using the manifest in [kibana](./kibana).
 Log in to Kibana and create a Logstash Pipeline (called `logstash_pipeline`) using the `pipeline.txt` in [logstash](./logstash).
 Import the dashboard in `Management > Kibana > Saved Object > Import`, pick `dashboard.ndjson`
 
+Create an index template using the `Dev Tools`: 
+```
+PUT _template/temperature_data_geoip
+{
+  "index_patterns": "parsed-*",
+  "aliases": {},
+  "mappings": {
+    "properties": {
+      "coordinates": {
+        "type": "geo_point"
+      }
+    }
+  }
+}
+```
+Note: If an index for the current date has already been created, delete it manually and let a new one automatically be created using the index template.
+
 Push the Logstash docker image using the manifest in [logstash](./logstash). 
 
 Create a user-provided-service as a logstash-drain:
