@@ -1,0 +1,14 @@
+---
+applications:
+  - name: webmvc-log
+    instances: 1
+    disk_quota: 256M
+    memory: 768M
+    path: build/libs/webmvc-log-1.0.0.jar
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health
+    buildpacks:
+      - java_buildpack
+    random-route: true
+    env:
+      TZ: Europe/Zurich
