@@ -16,4 +16,4 @@ applications:
     env:
       JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
       TZ: Europe/Zurich
-      LOCATION: Baar,ch
+      LOCATION: Auckland,nz|Queenstown,nz|Dunedin,nz|Wellington,nz|Christchurch,nz

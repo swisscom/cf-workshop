@@ -6,6 +6,8 @@ import lombok.Data;
 public class WeatherData {
 
     private String location;
+    private String country;
+    private String localTime;
     private Double celsius;
     private Double humidity;
     private Double rain;

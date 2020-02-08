@@ -18,7 +18,7 @@ public class OpenWeatherMapResponse {
     private Rain rain;
     private Snow snow;
     private Sys sys;
-    private Long timezone;
+    private Integer timezone;
     private Long visibility;
     private List<Weather> weather;
     private Wind wind;

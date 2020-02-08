@@ -23,6 +23,8 @@ public class WeatherDataService {
         log.info("Received WeatherData",
                 v("event", "WeatherData"),
                 v("location", weatherData.getLocation()),
+                v("country", weatherData.getCountry()),
+                v("localDateTime", weatherData.getLocalTime()),
                 v("coordinates", coordinates),
                 v("celsius", weatherData.getCelsius()),
                 v("humidity", weatherData.getHumidity()),
