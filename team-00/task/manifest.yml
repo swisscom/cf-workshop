@@ -1,0 +1,17 @@
+---
+applications:
+  - name: task-app
+    instances: 0
+    disk_quota: 256M
+    memory: 768M
+    path: build/libs/task-1.0.0.jar
+    buildpacks:
+      - java_buildpack
+    no-route: true
+    services:
+      - openweathermap
+      - rabbitmq
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+      TZ: Europe/Zurich
+      LOCATION: Auckland,nz|Queenstown,nz|Dunedin,nz|Wellington,nz|Christchurch,nz

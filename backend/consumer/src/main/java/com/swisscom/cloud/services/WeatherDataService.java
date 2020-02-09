@@ -20,7 +20,8 @@ public class WeatherDataService {
             coordinates = String.format("%s,%s", latitude, longitude);
         }
 
-        log.info("Received WeatherData",
+        log.info("Received WeatherData of {}",
+                weatherData.getLocation(),
                 v("event", "WeatherData"),
                 v("location", weatherData.getLocation()),
                 v("country", weatherData.getCountry()),
