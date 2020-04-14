@@ -20,12 +20,16 @@ public class WeatherDataController {
 
     private final WeatherDataService weatherDataService;
 
-    @PostMapping("weather-data")
-    public void postData(@RequestBody ParticleData body) {
-
+    @PostMapping("weather-data/particle")
+    public void postParticleData(@RequestBody ParticleData body) {
         WeatherData value = body.getValue();
-        if (value != null) {
-            weatherDataService.logWeatherData(value);
+        postData(value);
+    }
+
+    @PostMapping("weather-data")
+    public void postData(@RequestBody WeatherData body) {
+        if (body != null) {
+            weatherDataService.logWeatherData(body);
         } else {
             log.info("Received empty Json", v("body", body));
         }

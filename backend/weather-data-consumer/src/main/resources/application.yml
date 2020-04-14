@@ -1,0 +1,7 @@
+spring.application.name: consumer
+spring.main.banner-mode: OFF
+
+info:
+  java.vm.vendor: ${java.vm.vendor}
+  java.version: ${java.version}
+  application.name: ${spring.application.name}

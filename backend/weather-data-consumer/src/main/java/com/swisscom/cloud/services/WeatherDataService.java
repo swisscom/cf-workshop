@@ -26,7 +26,7 @@ public class WeatherDataService {
                 v("location", weatherData.getLocation()),
                 v("country", weatherData.getCountry()),
                 v("localDateTime", weatherData.getLocalTime()),
-                v("coordinates", coordinates),
+                v("map-coordinates", coordinates),
                 v("celsius", weatherData.getCelsius()),
                 v("humidity", weatherData.getHumidity()),
                 v("rain", weatherData.getRain()),

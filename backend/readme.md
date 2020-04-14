@@ -61,7 +61,7 @@ cf cups logstash-drain -l https://random-user:changeme@cf-workshop-logstash.scap
 ```
 
 ## Backend
-Build and deploy the consumer app using `./deploy.sh` in [consumer](./consumer).
+Build and deploy the consumer app using `./deploy.sh` in [consumer](./weather-data-consumer).
 
 ## Example Implementations
 Build and deploy the two example implementations using `./deploy.sh` in the respective directories [webmvc](../team-00/webmvc) and [webflux](../team-00/webflux).  

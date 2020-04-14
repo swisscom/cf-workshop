@@ -1,0 +1,19 @@
+---
+applications:
+  - name: weather-data-consumer
+    instances: 1
+    disk_quota: 256M
+    memory: 768M
+    path: build/libs/weather-data-consumer-1.0.0.jar
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health
+    buildpacks:
+      - java_buildpack
+    routes:
+      - route: weather-data-consumer.scapp.io
+    services:
+      - rabbitmq
+      - logstash-drain
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+      TZ: Europe/Zurich
