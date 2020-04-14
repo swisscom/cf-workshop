@@ -20,6 +20,7 @@ build/
 *.iml
 *.ipr
 out/
+.run/
 
 ### NetBeans ###
 /nbproject/private/
@@ -32,4 +33,3 @@ out/
 .vscode/
 /backend/particle/target
 /backend/particle/src/*.cpp
-/.run/
