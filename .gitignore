@@ -32,3 +32,4 @@ out/
 .vscode/
 /backend/particle/target
 /backend/particle/src/*.cpp
+/.run/
