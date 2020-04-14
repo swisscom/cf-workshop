@@ -1,0 +1,18 @@
+---
+applications:
+  - name: webflux-rest-cnb
+    instances: 1
+    disk_quota: 256M
+    memory: 768M
+    docker:
+      image: robachmann/webflux-rest-cnb:1.0.0-200414202059
+    health-check-type: http
+    health-check-http-endpoint: /actuator/health
+    random-route: true
+    services:
+      - openweathermap
+    env:
+      TZ: Europe/Zurich
+      LOCATION: Ittigen,ch
+      ENDPOINT: "https://weather-data-consumer.scapp.io"
+      SERVER_PORT: 8080
